@@ -1,6 +1,10 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\OzonController;
+use App\Http\Controllers\YandexController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -18,9 +22,12 @@ use Illuminate\Support\Facades\Route;
 Auth::routes();
 
 Route::prefix('admin')->middleware('auth')->group(function () {
+    Route::get('/', [AdminController::class, 'index']);
+    Route::get('/yandex', [YandexController::class, 'index']);
+    Route::get('/ozon', [OzonController::class, 'index']);
 });
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index']);
+Route::get('/', [HomeController::class, 'index']);
 
 
 Route::prefix('api')->middleware('auth')->group(function () {

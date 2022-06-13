@@ -8,14 +8,28 @@ use Yajra\DataTables\Html\Builder as BuilderDT;
 
 class Service
 {
-    protected $model;
-    protected $route;
-    protected $template;
-    protected $translate;
+    public $model;
+    public $route;
+    public $template;
+    public $translation;
 
-    function __construct(Model $model)
+    function __construct($model)
     {
-        $this->model = $model;
+        $this->model =  new $model;
+    }
+
+    public function outputData()
+    {
+        // $newModel = new $this->model;
+        $with = [
+            // 'permission' => $this->permission,
+            'title' =>  __($this->translation . 'title'),
+            'route' => $this->route,
+            'template' => $this->template,
+            'translation' => $this->translation,
+        ];
+        $with['dataTable'] = $this->constructViewDT();
+        return $with;
     }
 
     public function tableColumns()
@@ -58,6 +72,12 @@ class Service
             $this->model::select($this->columnsToSelect($this->tableColumns()))->with($with);
         $data = Datatables::of($query)->make(true);
         return $data;
+    }
+
+    public function getDatatableElements()
+    {
+        $query = $this->model::query();
+        return $this->dataTableData($query)->make(true);
     }
 
     protected function columnsToSelect($array)

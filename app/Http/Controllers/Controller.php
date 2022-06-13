@@ -12,4 +12,12 @@ class Controller extends BaseController
     {
         $this->service = $service;
     }
+
+    public function index()
+    {
+        if (request()->ajax()) {
+            return $this->service->getDatatableElements();
+        }
+        return view('admin.' . $this->service->template . 'index')->with($this->service->outputData());
+    }
 }
